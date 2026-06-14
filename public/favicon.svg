@@ -1,15 +1,53 @@
-<svg width="100%" viewBox="0 0 680 360" role="img" xmlns="http://www.w3.org/2000/svg" style="">
-<title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">JSling logo</title>
-<desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">A logo for JSling, a JavaScript interpreter, showing a terminal-style rounded square icon with angle brackets and a code slash, next to the wordmark "JSling" with a tagline "JS runtime, from scratch".</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e94560"/>
+      <stop offset="100%" style="stop-color:#f5a623"/>
+    </linearGradient>
+    <linearGradient id="jsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f7df1e"/>
+      <stop offset="100%" style="stop-color:#f0c800"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
 
-<rect x="60" y="60" width="240" height="240" rx="40" fill="#1e1e2e" style="fill:rgb(30, 30, 46);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
-<rect x="60" y="60" width="240" height="240" rx="40" fill="none" stroke="#3a3a4a" stroke-width="1" style="fill:none;stroke:rgb(58, 58, 74);color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <!-- Background rounded square -->
+  <rect x="8" y="8" width="240" height="240" rx="48" ry="48" fill="url(#bg)" filter="url(#shadow)"/>
 
-<path d="M120 140 L90 180 L120 220" fill="none" stroke="#7dd3fc" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" style="fill:none;stroke:rgb(125, 211, 252);color:rgb(0, 0, 0);stroke-width:10px;stroke-linecap:round;stroke-linejoin:round;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
-<path d="M240 140 L270 180 L240 220" fill="none" stroke="#7dd3fc" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" style="fill:none;stroke:rgb(125, 211, 252);color:rgb(0, 0, 0);stroke-width:10px;stroke-linecap:round;stroke-linejoin:round;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
-<line x1="200" y1="125" x2="160" y2="235" stroke="#4ade80" stroke-width="10" stroke-linecap="round" style="fill:rgb(0, 0, 0);stroke:rgb(74, 222, 128);color:rgb(0, 0, 0);stroke-width:10px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <!-- Subtle border -->
+  <rect x="8" y="8" width="240" height="240" rx="48" ry="48" fill="none" stroke="#e94560" stroke-width="2" opacity="0.3"/>
 
-<text x="360" y="180" font-size="56" font-weight="500" fill="var(--color-text-primary)" style="fill:rgb(20, 20, 19);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:14px;font-weight:500;text-anchor:start;dominant-baseline:auto">JSling</text>
-<text x="360" y="215" font-size="18" fill="var(--color-text-secondary)" style="fill:rgb(61, 61, 58);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:start;dominant-baseline:auto">JS runtime, from scratch</text>
+  <!-- Terminal window frame -->
+  <rect x="32" y="44" width="192" height="168" rx="16" ry="16" fill="#0f0f23" opacity="0.8"/>
 
+  <!-- Terminal title bar -->
+  <rect x="32" y="44" width="192" height="32" rx="16" ry="16" fill="#1e1e3a"/>
+  <rect x="32" y="60" width="192" height="16" fill="#1e1e3a"/>
+
+  <!-- Window dots -->
+  <circle cx="52" cy="60" r="5" fill="#ff5f57"/>
+  <circle cx="70" cy="60" r="5" fill="#febc2e"/>
+  <circle cx="88" cy="60" r="5" fill="#28c840"/>
+
+  <!-- Terminal prompt > -->
+  <text x="48" y="112" font-family="monospace, Courier" font-size="28" font-weight="bold" fill="#e94560" filter="url(#glow)">&gt;_</text>
+
+  <!-- JS text -->
+  <text x="118" y="180" font-family="Arial Black, Arial, sans-serif" font-size="80" font-weight="900" fill="url(#jsGrad)" filter="url(#glow)" letter-spacing="-4">JS</text>
+
+  <!-- Cursor blink line -->
+  <rect x="48" y="120" width="24" height="3" rx="1" fill="#e94560" opacity="0.8"/>
 </svg>
