@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Download jsling</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/">
+        <span class="brand-mark">JS</span>
+        <span>jsling</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#downloads">Downloads</a>
+        <a href="#install">Install</a>
+        <a href="#verify">Verify</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">C++17 JavaScript-like runtime</p>
+          <h1>Download jsling</h1>
+          <p class="lead">
+            Install a small Node-style command line runtime for scripts, REPL sessions,
+            and JavaScript language experiments.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="/download/windows-installer">Windows installer</a>
+            <a class="button" href="/download/unix-local-installer">Linux/macOS installer</a>
+          </div>
+        </div>
+
+        <div class="terminal" aria-label="jsling terminal preview">
+          <div class="terminal-bar">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <pre><code>$ jsling -e "console.log(1 + 2)"
+3
+
+$ jsling
+jsling v1.0.0 - JavaScript Runtime (REPL)
+&gt;&gt;&gt; const add = (a, b) =&gt; a + b
+&gt;&gt;&gt; console.log(add(2, 5))
+7</code></pre>
+        </div>
+      </section>
+
+      <section id="downloads" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Artifacts</p>
+          <h2>Choose your download</h2>
+        </div>
+
+        <div class="download-grid">
+          <article class="download-card">
+            <h3>Windows</h3>
+            <p>PowerShell installer for native Windows builds.</p>
+            <a class="button primary" href="/download/windows-installer">Download .ps1</a>
+            <code>.\scripts\install-windows.ps1 -AddToPath</code>
+          </article>
+
+          <article class="download-card">
+            <h3>Linux and macOS</h3>
+            <p>Local source-tree installer for Unix-like systems.</p>
+            <a class="button primary" href="/download/unix-local-installer">Download .sh</a>
+            <code>bash scripts/install-local.sh</code>
+          </article>
+
+          <article class="download-card">
+            <h3>Source installer</h3>
+            <p>Installer script intended for fetching and building from a Git repository.</p>
+            <a class="button" href="/download/unix-source-installer">Download install.sh</a>
+            <code>bash install.sh --prefix "$HOME/.local"</code>
+          </article>
+
+          <article class="download-card">
+            <h3>Local Linux binary</h3>
+            <p>Downloads the currently built Linux binary when it exists on this machine.</p>
+            <a class="button" href="/download/linux-binary">Download binary</a>
+            <code>bash COMPILER_CPP/scripts/build.sh</code>
+          </article>
+        </div>
+      </section>
+
+      <section id="install" class="section split">
+        <div>
+          <p class="eyebrow">Quick install</p>
+          <h2>Copy a command</h2>
+          <p>
+            The website serves the installer files directly. Download one, then run it from
+            the project directory or keep it beside the source tree.
+          </p>
+        </div>
+        <div class="commands">
+          <div>
+            <h3>Windows</h3>
+            <pre><code>powershell -ExecutionPolicy Bypass -File .\scripts\install-windows.ps1 -AddToPath</code></pre>
+          </div>
+          <div>
+            <h3>Linux/macOS</h3>
+            <pre><code>cd COMPILER_CPP
+bash scripts/install-local.sh</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="verify" class="section verify">
+        <p class="eyebrow">Check it</p>
+        <h2>Verify your install</h2>
+        <pre><code>jsling --version
+jsling -e "console.log(1 + 2)"</code></pre>
+        <p>Expected output: <strong>jsling v1.0.0</strong> and <strong>3</strong>.</p>
+      </section>
+    </main>
+
+    <footer>
+      <span>jsling download site</span>
+      <a href="/api/artifacts">Artifact status API</a>
+    </footer>
+  </body>
+</html>

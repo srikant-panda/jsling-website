@@ -1,0 +1,12 @@
+{
+  "name": "jsling-download-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Download website for jsling.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
