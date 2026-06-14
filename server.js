@@ -6,7 +6,7 @@ const { URL } = require("node:url");
 const PORT = Number(process.env.PORT || 4173);
 const HOST = process.env.HOST || "127.0.0.1";
 const DOWNLOADS_DIR = path.join(process.cwd(), "downloads");
-const PUBLIC_DIR = path.join(process.cwd(), "public");
+const PUBLIC_DIR = path.join(process.cwd(), "dist");
 
 const mimeTypes = new Map([
   [".html", "text/html; charset=utf-8"],

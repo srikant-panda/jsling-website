@@ -8,7 +8,7 @@
   ],
   "functions": {
     "api/server.js": {
-      "includeFiles": "{downloads/**,public/**}"
+      "includeFiles": "{downloads/**,dist/**}"
     }
   }
 }
