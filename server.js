@@ -5,8 +5,8 @@ const { URL } = require("node:url");
 
 const PORT = Number(process.env.PORT || 4173);
 const HOST = process.env.HOST || "127.0.0.1";
-const DOWNLOADS_DIR = path.join(__dirname, "downloads");
-const PUBLIC_DIR = path.join(__dirname, "public");
+const DOWNLOADS_DIR = path.join(process.cwd(), "downloads");
+const PUBLIC_DIR = path.join(process.cwd(), "public");
 
 const mimeTypes = new Map([
   [".html", "text/html; charset=utf-8"],
@@ -102,7 +102,7 @@ function safePublicPath(pathname) {
   return filePath;
 }
 
-const server = http.createServer((req, res) => {
+const handler = (req, res) => {
   if (!req.url) {
     sendJson(res, 400, { error: "Bad request" });
     return;
@@ -137,8 +137,13 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { "content-type": mimeTypes.get(ext) || mimeTypes.get("") });
     fs.createReadStream(filePath).pipe(res);
   });
-});
+};
 
-server.listen(PORT, HOST, () => {
-  console.log(`jsling download site running at http://${HOST}:${PORT}`);
-});
+module.exports = handler;
+
+if (require.main === module) {
+  const server = http.createServer(handler);
+  server.listen(PORT, HOST, () => {
+    console.log(`jsling download site running at http://${HOST}:${PORT}`);
+  });
+}
