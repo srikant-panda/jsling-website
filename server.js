@@ -17,11 +17,16 @@ const mimeTypes = new Map([
   [".sh", "text/x-shellscript; charset=utf-8"],
   [".ps1", "text/plain; charset=utf-8"],
   [".exe", "application/vnd.microsoft.portable-executable"],
+  [".svg", "image/svg+xml"],
   ["", "application/octet-stream"]
 ]);
 
 const downloads = {
   "/download/windows-installer": {
+    file: path.join(DOWNLOADS_DIR, "JSling-Setup.exe"),
+    name: "JSling-Setup.exe"
+  },
+  "/download/windows-ps1": {
     file: path.join(DOWNLOADS_DIR, "install-windows.ps1"),
     name: "install-windows.ps1"
   },

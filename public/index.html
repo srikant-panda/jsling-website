@@ -4,7 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Download jsling</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="stylesheet" href="/styles.css">
+    <script>
+      (function() {
+        const theme = localStorage.getItem('jsling-theme') || 'system';
+        let activeTheme = theme;
+        if (theme === 'system') {
+          activeTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', activeTheme);
+      })();
+    </script>
   </head>
   <body>
     <header class="topbar">
@@ -12,11 +23,43 @@
         <span class="brand-mark">JS</span>
         <span>jsling</span>
       </a>
-      <nav aria-label="Main navigation">
-        <a href="#downloads">Downloads</a>
-        <a href="#install">Install</a>
-        <a href="#verify">Verify</a>
-      </nav>
+      <div class="topbar-right">
+        <nav aria-label="Main navigation">
+          <a href="#downloads">Downloads</a>
+          <a href="#install">Install</a>
+          <a href="#verify">Verify</a>
+        </nav>
+        
+        <div class="header-actions">
+          <div class="theme-selector" role="radiogroup" aria-label="Theme preference">
+            <div class="theme-slider-bg"></div>
+            <button class="theme-btn" data-theme="light" aria-label="Light theme" title="Light theme">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+              </svg>
+            </button>
+            <button class="theme-btn" data-theme="system" aria-label="System theme" title="System theme">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </button>
+            <button class="theme-btn" data-theme="dark" aria-label="Dark theme" title="Dark theme">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <a class="github-link" href="https://github.com/srikant-panda/jsling" target="_blank" rel="noopener noreferrer" aria-label="GitHub Repository" title="GitHub Repository">
+            <svg viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.35 3.12.88.01.64.01 1.11.01 1.20 0 .21-.15.46-.55.38A8.013 8.013 0 0 1 0 8c0-4.42 3.58-8 8-8z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
     </header>
 
     <main>
@@ -29,8 +72,14 @@
             and JavaScript language experiments.
           </p>
           <div class="hero-actions">
-            <a class="button primary" href="/download/windows-installer">Windows installer</a>
-            <a class="button" href="/download/unix-local-installer">Linux/macOS installer</a>
+            <div class="action-group">
+              <a class="button primary" href="/download/windows-installer">Windows installer (.exe)</a>
+              <span class="action-subtext">Or download the <a href="/download/windows-ps1">PowerShell script</a></span>
+            </div>
+            <div class="action-group">
+              <a class="button" href="/download/unix-local-installer">Linux/macOS installer</a>
+              <span class="action-subtext">Or run: <code class="copy-cmd-inline" onclick="copyCommand(this)">bash &lt;(curl -fsSL <span class="origin-placeholder"></span>/download/unix-source-installer)</code></span>
+            </div>
           </div>
         </div>
 
@@ -60,15 +109,21 @@ jsling v1.0.0 - JavaScript Runtime (REPL)
         <div class="download-grid">
           <article class="download-card">
             <h3>Windows</h3>
-            <p>PowerShell installer for native Windows builds.</p>
-            <a class="button primary" href="/download/windows-installer">Download .ps1</a>
-            <code>.\scripts\install-windows.ps1 -AddToPath</code>
+            <p>Graphical Windows installer or PowerShell script.</p>
+            <a class="button primary" href="/download/windows-installer">Download .exe</a>
+            <div class="sub-link-container">
+              <a class="sub-link" href="/download/windows-ps1">Download .ps1 script instead</a>
+            </div>
+            <code>JSling-Setup.exe</code>
           </article>
 
           <article class="download-card">
             <h3>Linux and macOS</h3>
             <p>Local source-tree installer for Unix-like systems.</p>
             <a class="button primary" href="/download/unix-local-installer">Download .sh</a>
+            <div class="sub-link-container">
+              Or run: <code class="copy-cmd-inline" onclick="copyCommand(this)">bash &lt;(curl -fsSL <span class="origin-placeholder"></span>/download/unix-source-installer)</code>
+            </div>
             <code>bash scripts/install-local.sh</code>
           </article>
 
@@ -76,6 +131,9 @@ jsling v1.0.0 - JavaScript Runtime (REPL)
             <h3>Source installer</h3>
             <p>Installer script intended for fetching and building from a Git repository.</p>
             <a class="button" href="/download/unix-source-installer">Download install.sh</a>
+            <div class="sub-link-container">
+              Or run: <code class="copy-cmd-inline" onclick="copyCommand(this)">bash &lt;(curl -fsSL <span class="origin-placeholder"></span>/download/unix-source-installer)</code>
+            </div>
             <code>bash install.sh --prefix "$HOME/.local"</code>
           </article>
 
@@ -100,12 +158,16 @@ jsling v1.0.0 - JavaScript Runtime (REPL)
         <div class="commands">
           <div>
             <h3>Windows</h3>
-            <pre><code>powershell -ExecutionPolicy Bypass -File .\scripts\install-windows.ps1 -AddToPath</code></pre>
+            <pre><code class="copyable-pre" onclick="copyCommand(this)">powershell -ExecutionPolicy Bypass -File .\scripts\install-windows.ps1 -AddToPath</code></pre>
           </div>
           <div>
-            <h3>Linux/macOS</h3>
-            <pre><code>cd COMPILER_CPP
+            <h3>Linux/macOS (Local script)</h3>
+            <pre><code class="copyable-pre" onclick="copyCommand(this)">cd COMPILER_CPP
 bash scripts/install-local.sh</code></pre>
+          </div>
+          <div>
+            <h3>Linux/macOS (Quick curl &amp; bash)</h3>
+            <pre><code class="copyable-pre" onclick="copyCommand(this)">bash &lt;(curl -fsSL <span class="origin-placeholder"></span>/download/unix-source-installer)</code></pre>
           </div>
         </div>
       </section>
@@ -123,5 +185,79 @@ jsling -e "console.log(1 + 2)"</code></pre>
       <span>jsling download site</span>
       <a href="/api/artifacts">Artifact status API</a>
     </footer>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const origins = document.querySelectorAll('.origin-placeholder');
+        origins.forEach(el => {
+          el.textContent = window.location.origin;
+        });
+
+        // Theme switching logic
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        
+        function applyTheme(theme, save = true) {
+          let activeTheme = theme;
+          if (theme === 'system') {
+            activeTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          
+          document.documentElement.setAttribute('data-theme', activeTheme);
+          
+          themeButtons.forEach(btn => {
+            const isActive = btn.getAttribute('data-theme') === theme;
+            btn.classList.toggle('active', isActive);
+          });
+          
+          if (save) {
+            localStorage.setItem('jsling-theme', theme);
+          }
+        }
+
+        // Initialize theme selector UI state
+        const savedTheme = localStorage.getItem('jsling-theme') || 'system';
+        applyTheme(savedTheme, false);
+
+        themeButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            applyTheme(btn.getAttribute('data-theme'));
+          });
+        });
+
+        // Listen for system changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (localStorage.getItem('jsling-theme') === 'system') {
+            document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+          }
+        });
+      });
+
+      function copyCommand(element) {
+        // Get the text to copy, ignoring any existing tooltips
+        let text = "";
+        element.childNodes.forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            text += node.textContent;
+          } else if (node.nodeType === Node.ELEMENT_NODE && !node.classList.contains('copy-tooltip')) {
+            text += node.textContent;
+          }
+        });
+        
+        navigator.clipboard.writeText(text.trim()).then(() => {
+          // Check if tooltip already exists
+          let tooltip = element.querySelector('.copy-tooltip');
+          if (!tooltip) {
+            tooltip = document.createElement('span');
+            tooltip.className = 'copy-tooltip';
+            tooltip.textContent = 'Copied!';
+            element.appendChild(tooltip);
+            setTimeout(() => {
+              tooltip.remove();
+            }, 1200);
+          }
+        }).catch(err => {
+          console.error('Failed to copy: ', err);
+        });
+      }
+    </script>
   </body>
 </html>
