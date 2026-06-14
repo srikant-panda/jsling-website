@@ -25,8 +25,8 @@ PORT=8080 node server.js
 
 All installer scripts and binaries are packaged directly within the `website/downloads/` directory:
 
-- `/download/windows-installer` -> `website/downloads/install-windows.ps1`
-- `/download/unix-local-installer` -> `website/downloads/install-local.sh`
+- `/download/windows-installer` -> `website/downloads/JSling-Setup.exe`
+- `/download/windows-binary` -> `website/downloads/jsling (1).exe`
 - `/download/unix-source-installer` -> `website/downloads/install.sh`
 - `/download/linux-binary` -> `website/downloads/jsling`
 - `/api/artifacts` -> JSON availability status

@@ -46,13 +46,13 @@ export default function Hero() {
         <div className="terminal-bar">
           <span /><span /><span />
         </div>
-        <pre><code><span className="prompt">$</span> jsling -e "console.log(1 + 2)"
+        <pre><code><span className="prompt">$</span> jsling -e <span className="terminal-str">"console.log(1 + 2)"</span>
 <span className="output">3</span>
 
 <span className="prompt">$</span> jsling
-jsling v1.0.0 — JavaScript Runtime (REPL)
-<span className="prompt">&gt;&gt;&gt;</span> const add = (a, b) =&gt; a + b
-<span className="prompt">&gt;&gt;&gt;</span> console.log(add(2, 5))
+<span className="terminal-comment">jsling v1.0.0 — JavaScript Runtime (REPL)</span>
+<span className="prompt">&gt;&gt;&gt;</span> <span className="terminal-kw">const</span> add = (a, b) =&gt; a + b
+<span className="prompt">&gt;&gt;&gt;</span> console.log(add(<span className="terminal-num">2</span>, <span className="terminal-num">5</span>))
 <span className="output">7</span><span className="terminal-caret" /></code></pre>
       </div>
     </section>

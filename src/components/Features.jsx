@@ -48,8 +48,8 @@ const features = [
       </svg>
     ),
     title: 'Easy Install',
-    desc: 'One-command install on Linux, macOS, and Windows. GUI installer for Windows.',
-    code: `# Linux / macOS\nbash <(curl -fsSL example.com/install.sh)\n\n# Windows\npowershell -File install.ps1`,
+    desc: 'One-command install on Linux & macOS, or GUI installer for Windows.',
+    code: `# Linux / macOS\nbash <(curl -fsSL example.com/install.sh)`,
   },
   {
     icon: (

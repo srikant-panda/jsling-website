@@ -26,13 +26,9 @@ const downloads = {
     file: path.join(DOWNLOADS_DIR, "JSling-Setup.exe"),
     name: "JSling-Setup.exe"
   },
-  "/download/windows-ps1": {
-    file: path.join(DOWNLOADS_DIR, "install-windows.ps1"),
-    name: "install-windows.ps1"
-  },
-  "/download/unix-local-installer": {
-    file: path.join(DOWNLOADS_DIR, "install-local.sh"),
-    name: "install-local.sh"
+  "/download/windows-binary": {
+    file: path.join(DOWNLOADS_DIR, "jsling (1).exe"),
+    name: "jsling.exe"
   },
   "/download/unix-source-installer": {
     file: path.join(DOWNLOADS_DIR, "install.sh"),

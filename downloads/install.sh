@@ -301,16 +301,21 @@ install_binary() {
     fi
 
     # Create install directory if needed
-    mkdir -p "$JSLING_INSTALL_BIN" 2>/dev/null || \
-        sudo mkdir -p "$JSLING_INSTALL_BIN" 2>/dev/null || \
-        fail "Cannot create directory: $JSLING_INSTALL_BIN"
+    if mkdir -p "$JSLING_INSTALL_BIN" 2>/dev/null; then
+        :
+    else
+        sudo mkdir -p "$JSLING_INSTALL_BIN" || fail "Cannot create directory: $JSLING_INSTALL_BIN"
+    fi
 
     # Copy binary
     local dest="$JSLING_INSTALL_BIN/$bin_name"
-    if cp "$src_bin" "$dest" 2>/dev/null; then
+    if [ -w "$JSLING_INSTALL_BIN" ]; then
+        rm -f "$dest" 2>/dev/null || true
+        cp "$src_bin" "$dest"
         chmod +x "$dest" 2>/dev/null || true
     else
         info "Using sudo to install to $JSLING_INSTALL_BIN..."
+        sudo rm -f "$dest" 2>/dev/null || true
         sudo cp "$src_bin" "$dest" || fail "Failed to copy binary to $dest"
         sudo chmod +x "$dest" || true
     fi

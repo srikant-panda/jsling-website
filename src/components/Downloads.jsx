@@ -14,16 +14,15 @@ const downloads = [
     code: 'JSling-Setup.exe',
   },
   {
-    title: 'Linux & macOS',
+    title: 'Windows Binary',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+        <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 17.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
       </svg>
     ),
-    desc: 'Local source-tree installer for Unix-like systems.',
-    primary: { href: '/download/unix-local-installer', label: 'Download .sh' },
-    subCmd: true,
-    code: 'bash scripts/install-local.sh',
+    desc: 'Pre-built Windows binary (standalone executable).',
+    primary: { href: '/download/windows-binary', label: 'Download jsling.exe' },
+    code: 'jsling.exe',
   },
   {
     title: 'Source Installer',
@@ -101,7 +100,8 @@ export default function Downloads() {
 
 function DownloadCard({ item, origin, delay }) {
   const ref = useReveal()
-  const curlCmd = `bash <(curl -fsSL ${origin}/download/unix-source-installer)`
+  const defaultCmd = `bash <(curl -fsSL ${origin}/download/unix-source-installer)`
+  const runCmd = item.runCmd ? item.runCmd.replace('${origin}', origin) : defaultCmd
 
   return (
     <article className={`download-card reveal reveal-delay-${delay}`} ref={ref}>
@@ -111,7 +111,7 @@ function DownloadCard({ item, origin, delay }) {
       {item.subCmd && (
         <div className="sub-cmd-block">
           <span className="sub-cmd-label">Or run:</span>
-          <CopyCmd text={curlCmd} />
+          <CopyCmd text={runCmd} />
         </div>
       )}
       <CopyableCode text={item.code} className="download-filename" />

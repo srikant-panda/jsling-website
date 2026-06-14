@@ -3,14 +3,6 @@ import { useReveal } from '../hooks/useReveal'
 
 const commands = [
   {
-    title: 'Windows',
-    code: 'powershell -ExecutionPolicy Bypass -File .\\scripts\\install-windows.ps1 -AddToPath',
-  },
-  {
-    title: 'Linux/macOS (Local script)',
-    code: 'cd COMPILER_CPP\nbash scripts/install-local.sh',
-  },
-  {
     title: 'Linux/macOS (Quick curl & bash)',
     code: 'bash <(curl -fsSL {origin}/download/unix-source-installer)',
   },
