@@ -1,5 +1,4 @@
 node_modules/
-downloads/
 .env
 .env.local
 npm-debug.log*
