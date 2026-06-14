@@ -8,7 +8,7 @@ set -euo pipefail
 
 # --- Configuration ---
 JSLING_VERSION="${JSLING_VERSION:-latest}"
-JSLING_REPO="${JSLING_REPO:-https://github.com/user/jsling}"
+JSLING_REPO="${JSLING_REPO:-https://github.com/srikant-panda/jsling}"
 JSLING_NAME="jsling"
 JSLING_INSTALL_PREFIX="${JSLING_INSTALL_PREFIX:-}"
 JSLING_INSTALL_BIN=""

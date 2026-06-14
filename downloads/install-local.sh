@@ -24,6 +24,14 @@ PREFIX=""
 UNINSTALL=false
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+TEMP_DIR=""
+
+cleanup() {
+    if [ -n "${TEMP_DIR:-}" ] && [ -d "$TEMP_DIR" ]; then
+        rm -rf "$TEMP_DIR"
+    fi
+}
+trap cleanup EXIT
 
 # --- Parse arguments ---
 while [ $# -gt 0 ]; do
@@ -112,7 +120,11 @@ main() {
 
     # Verify source exists
     if [ ! -f "$PROJECT_DIR/CMakeLists.txt" ]; then
-        fail "CMakeLists.txt not found in $PROJECT_DIR"
+        info "CMakeLists.txt not found in $PROJECT_DIR."
+        info "Cloning repository from https://github.com/srikant-panda/jsling..."
+        TEMP_DIR="$(mktemp -d 2>/dev/null || mktemp -d -t jsling)"
+        git clone --depth 1 https://github.com/srikant-panda/jsling "$TEMP_DIR" || fail "Failed to clone repository"
+        PROJECT_DIR="$TEMP_DIR"
     fi
 
     determine_prefix

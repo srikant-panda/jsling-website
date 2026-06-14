@@ -107,81 +107,98 @@ if ($Uninstall) {
     exit 0
 }
 
+$tempDirToClean = $null
+
 if (-not (Test-Path (Join-Path $projectDir "CMakeLists.txt"))) {
-    Fail "CMakeLists.txt not found in $projectDir"
+    Write-Info "CMakeLists.txt not found in $projectDir."
+    Write-Info "Cloning repository from https://github.com/srikant-panda/jsling..."
+    $tempDir = Join-Path $env:TEMP "jsling-$(Get-Random)"
+    New-Item -ItemType Directory -Force -Path $tempDir | Out-Null
+    $tempDirToClean = $tempDir
+    & git clone --depth 1 https://github.com/srikant-panda/jsling $tempDir
+    if ($LASTEXITCODE -ne 0) {
+        Fail "Failed to clone repository from GitHub."
+    }
+    $projectDir = $tempDir
 }
 
-Require-Command "cmake" "Install with: winget install Kitware.CMake"
+try {
+    Require-Command "cmake" "Install with: winget install Kitware.CMake"
 
-Write-Info "Source directory: $projectDir"
-Write-Info "Install prefix: $Prefix"
-Write-Info "Build type: $BuildType"
+    Write-Info "Source directory: $projectDir"
+    Write-Info "Install prefix: $Prefix"
+    Write-Info "Build type: $BuildType"
 
-$buildDir = Join-Path $projectDir "build-windows"
-New-Item -ItemType Directory -Force -Path $buildDir | Out-Null
-New-Item -ItemType Directory -Force -Path $installBin | Out-Null
+    $buildDir = Join-Path $projectDir "build-windows"
+    New-Item -ItemType Directory -Force -Path $buildDir | Out-Null
+    New-Item -ItemType Directory -Force -Path $installBin | Out-Null
 
-$configureArgs = @(
-    "-S", $projectDir,
-    "-B", $buildDir,
-    "-DCMAKE_BUILD_TYPE=$BuildType",
-    "-DCMAKE_INSTALL_PREFIX=$Prefix",
-    "-DCMAKE_CXX_STANDARD=17"
-)
+    $configureArgs = @(
+        "-S", $projectDir,
+        "-B", $buildDir,
+        "-DCMAKE_BUILD_TYPE=$BuildType",
+        "-DCMAKE_INSTALL_PREFIX=$Prefix",
+        "-DCMAKE_CXX_STANDARD=17"
+    )
 
-if ($Generator -ne "") {
-    $configureArgs = @("-G", $Generator) + $configureArgs
-}
+    if ($Generator -ne "") {
+        $configureArgs = @("-G", $Generator) + $configureArgs
+    }
 
-Write-Info "Configuring with CMake..."
-& cmake @configureArgs
-if ($LASTEXITCODE -ne 0) {
-    Fail "CMake configuration failed. Install Visual Studio Build Tools, LLVM, or MinGW, then try again."
-}
+    Write-Info "Configuring with CMake..."
+    & cmake @configureArgs
+    if ($LASTEXITCODE -ne 0) {
+        Fail "CMake configuration failed. Install Visual Studio Build Tools, LLVM, or MinGW, then try again."
+    }
 
-Write-Info "Building jsling..."
-& cmake --build $buildDir --config $BuildType
-if ($LASTEXITCODE -ne 0) {
-    Fail "Build failed"
-}
+    Write-Info "Building jsling..."
+    & cmake --build $buildDir --config $BuildType
+    if ($LASTEXITCODE -ne 0) {
+        Fail "Build failed"
+    }
 
-Write-Info "Installing jsling..."
-& cmake --install $buildDir --config $BuildType
-if ($LASTEXITCODE -ne 0) {
-    Fail "Install failed"
-}
+    Write-Info "Installing jsling..."
+    & cmake --install $buildDir --config $BuildType
+    if ($LASTEXITCODE -ne 0) {
+        Fail "Install failed"
+    }
 
-if (-not (Test-Path $exePath)) {
-    Fail "Installed binary not found at $exePath"
-}
+    if (-not (Test-Path $exePath)) {
+        Fail "Installed binary not found at $exePath"
+    }
 
-Write-Done "Installed: $exePath"
+    Write-Done "Installed: $exePath"
 
-$version = & $exePath --version 2>$null
-if (-not $version) {
-    $version = "unknown"
-}
+    $version = & $exePath --version 2>$null
+    if (-not $version) {
+        $version = "unknown"
+    }
 
-Write-Host ""
-Write-Host "jsling installed successfully!" -ForegroundColor Green
-Write-Host ""
-Write-Host "  Binary:  $exePath"
-Write-Host "  Version: $version"
+    Write-Host ""
+    Write-Host "jsling installed successfully!" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "  Binary:  $exePath"
+    Write-Host "  Version: $version"
 
-if ($AddToPath) {
-    Add-UserPath $installBin
-} else {
-    $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
-    if (-not $userPath -or -not ($userPath.Split(";") -contains $installBin)) {
-        Write-Host ""
-        Write-Warn "$installBin is not in your user PATH."
-        Write-Host "  Re-run with -AddToPath to add it automatically."
+    if ($AddToPath) {
+        Add-UserPath $installBin
+    } else {
+        $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+        if (-not $userPath -or -not ($userPath.Split(";") -contains $installBin)) {
+            Write-Host ""
+            Write-Warn "$installBin is not in your user PATH."
+            Write-Host "  Re-run with -AddToPath to add it automatically."
+        }
+    }
+
+    Write-Host ""
+    Write-Host "Quick start:"
+    Write-Host "  jsling"
+    Write-Host "  jsling script.js"
+    Write-Host "  jsling -e `"console.log(1 + 2)`""
+    Write-Host ""
+} finally {
+    if ($tempDirToClean) {
+        Remove-Item $tempDirToClean -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
 }
-
-Write-Host ""
-Write-Host "Quick start:"
-Write-Host "  jsling"
-Write-Host "  jsling script.js"
-Write-Host "  jsling -e `"console.log(1 + 2)`""
-Write-Host ""
