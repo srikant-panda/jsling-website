@@ -8,7 +8,7 @@ set -euo pipefail
 
 # --- Configuration ---
 JSLING_VERSION="${JSLING_VERSION:-latest}"
-JSLING_REPO="${JSLING_REPO:-https://github.com/srikant-panda/jsling}"
+JSLING_REPO="${JSLING_REPO:-https://github.com/user/jsling}"
 JSLING_NAME="jsling"
 JSLING_INSTALL_PREFIX="${JSLING_INSTALL_PREFIX:-}"
 JSLING_INSTALL_BIN=""
@@ -95,6 +95,66 @@ check_cmd() {
     command -v "$1" &>/dev/null && echo "$1" || echo ""
 }
 
+detect_distro_and_install_deps() {
+    local missing=("$@")
+    warn "Missing dependencies: ${missing[*]}"
+    
+    local install_choice
+    read -p "Would you like to install the missing dependencies automatically? [y/N]: " -r install_choice
+    if [[ ! "$install_choice" =~ ^[Yy]$ ]]; then
+        fail "Cannot proceed without dependencies. Please install manually."
+    fi
+
+    local cmd=""
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        case "$ID" in
+            ubuntu|debian|pop|mint)
+                cmd="apt-get update && apt-get install -y cmake build-essential git"
+                ;;
+            fedora)
+                cmd="dnf install -y cmake gcc-c++ git make"
+                ;;
+            arch|manjaro)
+                cmd="pacman -Syu --noconfirm cmake base-devel git"
+                ;;
+            alpine)
+                cmd="apk update && apk add cmake g++ git make"
+                ;;
+            centos|rhel)
+                cmd="yum install -y cmake gcc-c++ git make"
+                ;;
+        esac
+    fi
+
+    if [ -z "$cmd" ]; then
+        if command -v apt-get &>/dev/null; then
+            cmd="apt-get update && apt-get install -y cmake build-essential git"
+        elif command -v dnf &>/dev/null; then
+            cmd="dnf install -y cmake gcc-c++ git make"
+        elif command -v pacman &>/dev/null; then
+            cmd="pacman -Syu --noconfirm cmake base-devel git"
+        elif command -v apk &>/dev/null; then
+            cmd="apk update && apk add cmake g++ git make"
+        elif command -v yum &>/dev/null; then
+            cmd="yum install -y cmake gcc-c++ git make"
+        else
+            fail "Unable to auto-detect package manager. Please install dependencies manually."
+        fi
+    fi
+
+    info "Installing dependencies via: $cmd"
+    
+    if [ "$(id -u)" != "0" ]; then
+        info "Elevated privileges (sudo) are required to install packages. Requesting password..."
+        eval "sudo $cmd" || fail "Dependency installation failed."
+    else
+        eval "$cmd" || fail "Dependency installation failed."
+    fi
+
+    success "Dependencies installed successfully."
+}
+
 check_dependencies() {
     info "Checking dependencies..."
 
@@ -141,8 +201,14 @@ check_dependencies() {
     fi
 
     if [ ${#missing[@]} -gt 0 ]; then
-        echo ""
-        fail "Missing required tools:\n$(printf '  - %s\n' "${missing[@]}")\n\n$(install_help)"
+        local os
+        os="$(detect_os)"
+        if [ "$os" = "linux" ]; then
+            detect_distro_and_install_deps "${missing[@]}"
+        else
+            echo ""
+            fail "Missing required tools:\n$(printf '  - %s\n' "${missing[@]}")\n\n$(install_help)"
+        fi
     fi
 
     success "All dependencies found"
@@ -254,21 +320,17 @@ build_source() {
         cores=1
     fi
 
-    cmake -S "$project_dir" -B "$build_dir" \
+    if ! cmake -S "$project_dir" -B "$build_dir" \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX="$JSLING_INSTALL_PREFIX" \
-        -DCMAKE_CXX_STANDARD=17 \
-        > "$JSLING_TEMP_DIR/cmake.log" 2>&1 || {
-            cat "$JSLING_TEMP_DIR/cmake.log"
-            fail "CMake configuration failed"
-        }
+        -DCMAKE_CXX_STANDARD=17; then
+        fail "CMake configuration failed. See configuration errors above."
+    fi
 
     # Build
-    cmake --build "$build_dir" --config Release -j"$cores" \
-        > "$JSLING_TEMP_DIR/build.log" 2>&1 || {
-            cat "$JSLING_TEMP_DIR/build.log"
-            fail "Build failed"
-        }
+    if ! cmake --build "$build_dir" --config Release -j"$cores"; then
+        fail "Build failed. See compilation errors above."
+    fi
 
     success "Build complete"
 
@@ -301,21 +363,16 @@ install_binary() {
     fi
 
     # Create install directory if needed
-    if mkdir -p "$JSLING_INSTALL_BIN" 2>/dev/null; then
-        :
-    else
-        sudo mkdir -p "$JSLING_INSTALL_BIN" || fail "Cannot create directory: $JSLING_INSTALL_BIN"
-    fi
+    mkdir -p "$JSLING_INSTALL_BIN" 2>/dev/null || \
+        sudo mkdir -p "$JSLING_INSTALL_BIN" 2>/dev/null || \
+        fail "Cannot create directory: $JSLING_INSTALL_BIN"
 
     # Copy binary
     local dest="$JSLING_INSTALL_BIN/$bin_name"
-    if [ -w "$JSLING_INSTALL_BIN" ]; then
-        rm -f "$dest" 2>/dev/null || true
-        cp "$src_bin" "$dest"
+    if cp "$src_bin" "$dest" 2>/dev/null; then
         chmod +x "$dest" 2>/dev/null || true
     else
         info "Using sudo to install to $JSLING_INSTALL_BIN..."
-        sudo rm -f "$dest" 2>/dev/null || true
         sudo cp "$src_bin" "$dest" || fail "Failed to copy binary to $dest"
         sudo chmod +x "$dest" || true
     fi
@@ -398,6 +455,15 @@ main() {
     os="$(detect_os)"
     arch="$(detect_arch)"
     info "Detected: $os / $arch"
+
+    if [ "$os" = "linux" ]; then
+        local install_confirm
+        read -p "Do you want to proceed with installing jsling on Linux? [Y/n]: " -r install_confirm
+        if [[ "$install_confirm" =~ ^[Nn]$ ]]; then
+            info "Installation aborted by user."
+            exit 0
+        fi
+    fi
 
     determine_prefix
     info "Install target: $JSLING_INSTALL_BIN"
